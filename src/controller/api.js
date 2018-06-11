@@ -32,7 +32,7 @@ module.exports = class extends Base {
           where['timestamp'] = {"$gte": parseInt(begin), "$lte": parseInt(end)};
         }
         console.log(where)
-        let data = await this.mongo('message').where(where).page(page,20).countSelect();
+        let data = await this.mongo('message').order({'timestamp':-1}).where(where).page(page,20).countSelect();
         return this.success(data);
     }
 
