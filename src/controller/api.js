@@ -20,7 +20,7 @@ module.exports = class extends Base {
           where['toAddr'] = toAddr;
         }
         if(status) {
-          where['status'] = toAddr;
+          where['status'] = status;
         }
         if(ipAddr) {
             where['ipAddr'] = ipAddr;
