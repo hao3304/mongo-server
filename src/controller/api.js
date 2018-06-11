@@ -23,10 +23,10 @@ module.exports = class extends Base {
           where['status'] = toAddr;
         }
         if(ipAddr) {
-            where['toAddr'] = ipAddr;
+            where['ipAddr'] = ipAddr;
         }
         if(fromAddr) {
-            where['toAddr'] = fromAddr;
+            where['fromAddr'] = fromAddr;
         }
         if(begin&&end) {
           where['timestamp'] = {"$gte": parseInt(begin), "$lte": parseInt(end)};
