@@ -15,8 +15,12 @@ module.exports = class extends Base {
         let ipAddr = this.get('ipAddr');
         let fromAddr = this.get('fromAddr');
         let page = this.get('page')|| 1;
+        let status = this.get('status')|| 'send';
         if(toAddr) {
           where['toAddr'] = toAddr;
+        }
+        if(status) {
+          where['status'] = toAddr;
         }
         if(ipAddr) {
             where['toAddr'] = ipAddr;
