@@ -15,7 +15,7 @@ module.exports = class extends Base {
         let ipAddr = this.get('ipAddr');
         let fromAddr = this.get('fromAddr');
         let page = this.get('page')|| 1;
-        let status = this.get('status')|| 'send';
+        let status = this.get('status')|| 'sent';
         if(toAddr) {
           where['toAddr'] = toAddr;
         }
@@ -31,6 +31,7 @@ module.exports = class extends Base {
         if(begin&&end) {
           where['timestamp'] = {"$gte": parseInt(begin), "$lte": parseInt(end)};
         }
+        console.log(where)
         let data = await this.mongo('message').where(where).page(page,20).countSelect();
         return this.success(data);
     }
