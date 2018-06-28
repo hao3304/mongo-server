@@ -42,7 +42,7 @@ module.exports = class extends Base {
         let k = this.get('k') || 10;
 
         if(["ipAddr", "fromAddr", "toAddr"].indexOf(type) == -1) {
-            return this.fail('type must in "idAddr, fromAddr, toAddr"');
+            return this.fail('type must in "ipAddr, fromAddr, toAddr"');
         }
 
         let end = new Date().valueOf()/1000;
@@ -62,7 +62,7 @@ module.exports = class extends Base {
         }
 
         let result = await this.mongo('message')
-            .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + type, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": k}]);
+            .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + type, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": parseInt(k)}]);
 
         return this.success(result);
     }
