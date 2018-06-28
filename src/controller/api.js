@@ -47,7 +47,7 @@ module.exports = class extends Base {
 
         let end = new Date().valueOf()/1000;
         let start;
-        switch (type) {
+        switch (range) {
             case 'day':
                 start = end - 24 * 3600;
                 break;
@@ -62,8 +62,7 @@ module.exports = class extends Base {
         }
 
         let result = await this.mongo('message')
-            .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + type, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": k}])
-            .select();
+            .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + type, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": k}]);
 
         return this.success(result);
     }
