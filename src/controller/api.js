@@ -4,7 +4,7 @@ module.exports = class extends Base {
     async indexAction() {
         let data = await this.mongo('message').limit(2).select();
         console.log(data);
-        return this.display();
+        return this.success(data);
     }
 
     async searchAction() {
