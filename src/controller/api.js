@@ -36,5 +36,37 @@ module.exports = class extends Base {
         return this.success(data);
     }
 
+    async topAction() {
+        let type = this.get('type')
+        let range = this.get('range')
+        let k = this.get('k') || 10;
+
+        if(["ipAddr", "fromAddr", "toAddr"].indexOf(type) == -1) {
+            return this.fail('type must in "idAddr, fromAddr, toAddr"');
+        }
+
+        let end = new Date().valueOf()/1000;
+        let start;
+        switch (type) {
+            case 'day':
+                start = end - 24 * 3600;
+                break;
+            case 'week':
+                start = end - 7 * 24 * 3600;
+                break;
+            case 'month':
+                start = end - 30 * 24 * 3600;
+                break;
+            default:
+                start = end - 3600;
+        }
+
+        let result = await this.mongo('message')
+            .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + type, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": k}])
+            .select();
+
+        return this.success(result);
+    }
+
 
 };
