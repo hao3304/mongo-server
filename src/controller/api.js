@@ -81,7 +81,7 @@ module.exports = class extends Base {
                 let end = time.date[1];
                 console.log(time, t);
                 let result = await this.mongo('message')
-                    .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }]);
+                    .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }],{allowDiskUse: true});
                 await this.cache(`${t}${time.name}`, result);
                     console.log(result);
             }
