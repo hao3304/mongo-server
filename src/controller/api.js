@@ -77,8 +77,8 @@ module.exports = class extends Base {
             for(var j in times) {
                 const time = times[j];
 
-                let start = time.date[0];
-                let end = time.date[1];
+                let start = time.date[0] - 8*3600;
+                let end = time.date[1]- 8*3600;
                 console.log(time, t);
                 let result = await this.mongo('message')
                     .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }],{allowDiskUse: true});
