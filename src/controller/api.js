@@ -7,6 +7,30 @@ module.exports = class extends Base {
         return this.success(data);
     }
 
+    async ipAction() {
+
+        let model = this.mongo('trust_ip');
+        if(this.isGet) {
+            let data = await model.select();
+            if(data && data.length > 0) {
+                this.success(data[0]);
+            }else{
+                this.success([]);
+            }
+        }else{
+
+            let {ips} = this.post();
+            if(ips) {
+                await model.where({}).delete();
+                let rep =  await model.add({ips:ips});
+                this.success(rep);
+            }else{
+                this.fail('请传入正确参数ips');
+            }
+
+        }
+    }
+
     async searchAction() {
         let where = {};
         let toAddr = this.get('toAddr');
@@ -39,7 +63,7 @@ module.exports = class extends Base {
     async topAction() {
         let type = this.get('type')
         let range = this.get('range')
-       // let k = this.get('k') || 10;
+        // let k = this.get('k') || 10;
 
         // if(["ipAddr", "fromAddr", "toAddr"].indexOf(type) == -1) {
         //     return this.fail('type must in "ipAddr, fromAddr, toAddr"');
@@ -80,10 +104,17 @@ module.exports = class extends Base {
                 let start = time.date[0] - 8*3600;
                 let end = time.date[1]- 8*3600;
                 console.log(time, t);
+                let ips = [];
+                let data = await this.mongo('trust_ip').select();
+
+                if(data && data.length>0) {
+                    data = data[0].ips;
+                }
+
                 let result = await this.mongo('message')
-                    .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }],{allowDiskUse: true});
+                    .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }, [t]: {"$nin": ips}}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }],{allowDiskUse: true});
                 await this.cache(`${t}${time.name}`, result);
-                    console.log(result);
+                console.log(result);
             }
         }
 

@@ -1,7 +1,7 @@
 module.exports = [
-    {
-        cron: '*/10 * * * *',
-        handle: 'api/run',
-        immediate: true
-    }
+    // {
+    //     cron: '*/10 * * * *',
+    //     handle: 'api/run',
+    //     immediate: true
+    // }
 ]
