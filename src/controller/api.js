@@ -112,7 +112,7 @@ module.exports = class extends Base {
                 }
 
                 let result = await this.mongo('message')
-                    .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }, [t]: {"$nin": ips}}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }],{allowDiskUse: true});
+                    .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }, 'ipAddr': {"$nin": ips}}}, {"$group": {"_id": "$" + t, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": 10 }],{allowDiskUse: true});
                 await this.cache(`${t}${time.name}`, result);
                 console.log(result);
             }
