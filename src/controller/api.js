@@ -108,7 +108,7 @@ module.exports = class extends Base {
                 let data = await this.mongo('trust_ip').select();
 
                 if(data && data.length>0) {
-                    data = data[0].ips;
+                    ips = data[0].ips;
                 }
 
                 let result = await this.mongo('message')
