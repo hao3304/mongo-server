@@ -100,12 +100,23 @@ module.exports = class extends Base {
                     'ipAddr': {"$nin": ips}
                 }
 
-                if(t == 'world') {
-                    match['country'] = {'$ne': 'China'}
-                }else{
-                    match['country'] = 'China'
+                let group =  {
+                    "lag": {"$first": "$lng"},
+                    "lat": {"$first": "$lat"},
+                    "country": {"$first": "$country"},
+                    "region": {"$first": "$region"},
+                    "ip": {"$first": "$ipAddr"},
+                    "count":{"$sum": 1}
                 }
 
+                if(t == 'world') {
+                    match['country'] = {'$ne': 'China'}
+                    group['_id'] = 'country'
+                }else{
+                    match['country'] = 'China'
+                    match['city'] = {'$ne': null }
+                    group['_id'] = '$city'
+                }
 
                 let result = await this.mongo('message')
                     .aggregate([
@@ -113,16 +124,7 @@ module.exports = class extends Base {
                             "$match": match
                         },
                         {
-                            "$group":
-                                {
-                                    "_id": "$city",
-                                    "lag": {"$first": "$lng"},
-                                    "lat": {"$first": "$lat"},
-                                    "country": {"$first": "$country"},
-                                    "region": {"$first": "$region"},
-                                    "ip": {"$first": "$ipAddr"},
-                                    "count":{"$sum": 1}
-                                }
+                            "$group": group
                         },
                         {"$sort": {"count": -1}}, {"$limit": 100 }],{allowDiskUse: true});
 
