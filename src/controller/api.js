@@ -166,8 +166,8 @@ module.exports = class extends Base {
 
     getTimes() {
         let end = new Date().valueOf()/1000;
-        // return [{name: 'hour',date:[end - 3600, end]}, {name: 'day', date:[end - 7* 24 * 3600,end]}, {name: 'week', date:[end - 24* 24 * 3600,end]}, {name: 'month', date:[end - 30* 24 * 3600,end]}]
-        return [{name: 'hour',date:[end - 1130* 24 * 3600, end]}]
+        return [{name: 'hour',date:[end - 3600, end]}, {name: 'day', date:[end - 7* 24 * 3600,end]}, {name: 'week', date:[end - 24* 24 * 3600,end]}, {name: 'month', date:[end - 30* 24 * 3600,end]}]
+        // return [{name: 'hour',date:[end - 1130* 24 * 3600, end]}]
     }
 
 };
