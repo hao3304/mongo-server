@@ -120,6 +120,7 @@ module.exports = class extends Base {
                                     "lat": {"$first": "$lat"},
                                     "country": {"$first": "$country"},
                                     "region": {"$first": "$region"},
+                                    "ip": {"$first": "$ipAddr"},
                                     "count":{"$sum": 1}
                                 }
                         },
