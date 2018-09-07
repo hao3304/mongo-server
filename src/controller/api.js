@@ -60,35 +60,76 @@ module.exports = class extends Base {
         return this.success(data);
     }
 
+    async geotopAction() {
+        let type = this.get('type')
+        let range = this.get('range')
+
+        let result = await this.cache(`${type}${range}`)|| [];
+        return this.success(result);
+    }
+
     async topAction() {
         let type = this.get('type')
         let range = this.get('range')
-        // let k = this.get('k') || 10;
-
-        // if(["ipAddr", "fromAddr", "toAddr"].indexOf(type) == -1) {
-        //     return this.fail('type must in "ipAddr, fromAddr, toAddr"');
-        // }
-        //
-        // let end = new Date().valueOf()/1000;
-        // let start;
-        // switch (range) {
-        //     case 'day':
-        //         start = end - 24 * 3600;
-        //         break;
-        //     case 'week':
-        //         start = end - 7 * 24 * 3600;
-        //         break;
-        //     case 'month':
-        //         start = end - 30 * 24 * 3600;
-        //         break;
-        //     default:
-        //         start = end - 3600;
-        // }
-        //
-        // let result = await this.mongo('message')
-        //     .aggregate([{"$match": {"timestamp": {"$gte": start, "$lte": end }}}, {"$group": {"_id": "$" + type, "count":{"$sum": 1}}}, {"$sort": {"count": -1}}, {"$limit": parseInt(k)}]);
         let result = await this.cache(`${type}${range}`)|| [];
         return this.success(result);
+    }
+
+    async geoAction() {
+        let type = ['china' , 'world'] // 1表示 中国范围内  0 表示 外国
+
+        let times = this.getTimes();
+
+        for(var i in type) {
+            const t = type[i];
+            for(var j in times) {
+                const time = times[j];
+
+                let start = time.date[0] - 8*3600;
+                let end = time.date[1]- 8*3600;
+                console.log(time, t);
+                let ips = [];
+                let data = await this.mongo('trust_ip').select();
+
+                if(data && data.length>0) {
+                    ips = data[0].ips;
+                }
+
+                let match = {
+                    "timestamp": {"$gte": start, "$lte": end },
+                    'ipAddr': {"$nin": ips}
+                }
+
+                if(t == 'world') {
+                    match['country'] = {'$ne': 'China'}
+                }else{
+                    match['country'] = 'China'
+                }
+
+
+                let result = await this.mongo('message')
+                    .aggregate([
+                        {
+                            "$match": match
+                        },
+                        {
+                            "$group":
+                                {
+                                    "_id": "$city",
+                                    "lag": {"$first": "$lng"},
+                                    "lat": {"$first": "$lat"},
+                                    "country": {"$first": "$country"},
+                                    "region": {"$first": "$region"},
+                                    "count":{"$sum": 1}
+                                }
+                        },
+                        {"$sort": {"count": -1}}, {"$limit": 100 }],{allowDiskUse: true});
+
+                await this.cache(`${t}${time.name}`, result);
+                console.log(result);
+            }
+        }
+
     }
 
 
@@ -117,12 +158,13 @@ module.exports = class extends Base {
                 console.log(result);
             }
         }
-
     }
+
 
     getTimes() {
         let end = new Date().valueOf()/1000;
         return [{name: 'hour',date:[end - 3600, end]}, {name: 'day', date:[end - 7* 24 * 3600,end]}, {name: 'week', date:[end - 24* 24 * 3600,end]}, {name: 'month', date:[end - 30* 24 * 3600,end]}]
+        // return [{name: 'hour',date:[end - 1130* 24 * 3600, end]}]
     }
 
 };

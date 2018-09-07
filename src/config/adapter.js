@@ -34,7 +34,7 @@ exports.model = {
         logger: msg => think.logger.info(msg) // 打印信息的 logger
     },
     mongo: {
-        host: '202.121.179.53',
+        host: '127.0.0.1',
         port: 27017,
         user: '',
         password: '',

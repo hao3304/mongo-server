@@ -1,7 +1,7 @@
 module.exports = [
     {
-        cron: '*/10 * * * *',
-        handle: 'api/run',
+        cron: '*/30 * * * *',
+        handle: 'api/geo',
         immediate: true
     }
 ]
