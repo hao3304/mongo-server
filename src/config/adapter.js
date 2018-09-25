@@ -34,11 +34,11 @@ exports.model = {
         logger: msg => think.logger.info(msg) // 打印信息的 logger
     },
     mongo: {
-        host: '127.0.0.1',
+        host: '202.121.179.52',
         port: 27017,
         user: '',
         password: '',
-        database: 'logMessage' // 数据库名称
+        database: 'logMessage2' // 数据库名称
     }
 }
 
