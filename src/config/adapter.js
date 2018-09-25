@@ -38,7 +38,7 @@ exports.model = {
         port: 27017,
         user: '',
         password: '',
-        database: 'logMessage' // 数据库名称
+        database: 'logMessage2' // 数据库名称
     }
 }
 
