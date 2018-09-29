@@ -39,6 +39,13 @@ exports.model = {
         user: '',
         password: '',
         database: 'logMessage' // 数据库名称
+    },
+    mongo53: {
+	    host: '202.121.179.53',
+	    port: 27017,
+	    user: '',
+	    password: '',
+	    database: 'elastic' // 数据库名称
     }
 }
 

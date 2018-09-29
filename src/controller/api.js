@@ -135,7 +135,6 @@ module.exports = class extends Base {
 
     }
 
-
     async runAction() {
         let type = ['ipAddr', 'fromAddr', 'toAddr'];
         let times = this.getTimes();
@@ -163,7 +162,20 @@ module.exports = class extends Base {
         }
     }
 
-
+    async queryAction() {
+			let begin = this.get('begin');
+			let end = this.get('end');
+			let type = this.get('type') || 'authlogin';
+			let name = this.get('name');
+			let page = this.get('page')|| 1;
+			let where = {name: name};
+			if(begin&&end) {
+				where['timestamp'] = {"$gte": parseInt(begin), "$lte": parseInt(end)};
+			}
+			let data = await this.mongo(type, 'mongo53').order({'timestamp':-1}).where(where).page(page,20).countSelect();
+			return this.success(data);
+    }
+    
     getTimes() {
         let end = new Date().valueOf()/1000;
         return [{name: 'hour',date:[end - 3600, end]}, {name: 'day', date:[end - 7* 24 * 3600,end]}, {name: 'week', date:[end - 24* 24 * 3600,end]}, {name: 'month', date:[end - 30* 24 * 3600,end]}]
