@@ -70,6 +70,7 @@ module.exports = class extends Base {
         const end = time.date[1] - 8 * 3600;
         const domains = data[0].domain;
         for (let i in domains) {
+          console.log("开始查询--" + domains[i]);
           const result = await this.mongo("message", "mongo2").aggregate(
             [
               {
@@ -83,7 +84,7 @@ module.exports = class extends Base {
             { allowDiskUse: true }
           );
           console.log(result);
-          this.cache(`${data[i]}${time.name}`, result);
+          this.cache(`${domains[i]}${time.name}`, result);
         }
       }
     }
