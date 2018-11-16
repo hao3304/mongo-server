@@ -52,14 +52,16 @@ module.exports = class extends Base {
   }
 
   async successAction() {
-    let result = await this.mongo("message").aggregate(
+    const result = await this.mongo("message").aggregate(
       [
-        { $match: { toDomain: "sjtu.edu.cn" } },
+        {
+          $match: { toDomain: "sjtu.edu.cn" }
+        },
         { $group: { _id: "$status", count: { $sum: 1 } } }
       ],
       { allowDiskUse: true }
     );
-
+    console.log(result);
     this.success(result);
   }
 
