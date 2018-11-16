@@ -62,30 +62,30 @@ module.exports = class extends Base {
     let model = this.mongo("domain", "mongo2");
     let data = await model.select();
     console.log(data);
-    if (data && data.length > 0) {
-      let times = this.getTimes();
-
-      for (var t in times) {
-        const time = times[t];
-        const start = time.date[0] - 8 * 3600;
-        const end = time.date[1] - 8 * 3600;
-
-        for (var i in data) {
-          const result = await this.mongo("message", "mongo2").aggregate(
-            [
-              {
-                $match: { toDomain: data[i] },
-                timestamp: { $gte: start, $lte: end }
-              },
-              { $group: { _id: "$status", count: { $sum: 1 } } }
-            ],
-            { allowDiskUse: true }
-          );
-          console.log(result);
-          this.cache(`${data[i]}${time.name}`, result);
-        }
-      }
-    }
+    // if (data && data.length > 0) {
+    //   let times = this.getTimes();
+    //
+    //   for (var t in times) {
+    //     const time = times[t];
+    //     const start = time.date[0] - 8 * 3600;
+    //     const end = time.date[1] - 8 * 3600;
+    //
+    //     for (var i in data) {
+    //       const result = await this.mongo("message", "mongo2").aggregate(
+    //         [
+    //           {
+    //             $match: { toDomain: data[i] },
+    //             timestamp: { $gte: start, $lte: end }
+    //           },
+    //           { $group: { _id: "$status", count: { $sum: 1 } } }
+    //         ],
+    //         { allowDiskUse: true }
+    //       );
+    //       console.log(result);
+    //       this.cache(`${data[i]}${time.name}`, result);
+    //     }
+    //   }
+    // }
   }
 
   async searchAction() {
