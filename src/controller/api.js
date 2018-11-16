@@ -31,7 +31,7 @@ module.exports = class extends Base {
   }
 
   async domainAction() {
-    let model = this.mongo2("domain");
+    let model = this.mongo("domain", "mongo2");
     if (this.isGet) {
       let data = await model.select();
       if (data && data.length > 0) {
@@ -52,7 +52,7 @@ module.exports = class extends Base {
   }
 
   async successAction() {
-    const result = await this.mongo2("message").aggregate(
+    const result = await this.mongo("message", "mongo2").aggregate(
       [
         {
           $match: { toDomain: "sjtu.edu.cn" }
