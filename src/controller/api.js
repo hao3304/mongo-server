@@ -54,7 +54,7 @@ module.exports = class extends Base {
   async successAction() {
     let type = this.get("type");
     let domain = this.get("domain");
-    let result = (await this.cache(`${type}${domain}`)) || [];
+    let result = (await this.cache(`${domain}${type}`)) || [];
     this.success(result);
   }
 
