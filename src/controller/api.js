@@ -61,6 +61,7 @@ module.exports = class extends Base {
   async statAction() {
     let model = this.mongo("domain", "mongo2");
     let data = await model.select();
+    console.log(data);
     if (data && data.length > 0) {
       let times = this.getTimes();
 
