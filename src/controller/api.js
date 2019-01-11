@@ -31,7 +31,7 @@ module.exports = class extends Base {
   }
 
   async domainAction() {
-    let model = this.mongo("domain", "mongo2");
+    let model = this.mongo("domain", "mongo");
     if (this.isGet) {
       let data = await model.select();
       if (data && data.length > 0) {
@@ -59,7 +59,7 @@ module.exports = class extends Base {
   }
 
   async statAction() {
-    let model = this.mongo("domain", "mongo2");
+    let model = this.mongo("domain", "mongo");
     let data = await model.select();
     if (data && data.length > 0) {
       let times = this.getTimes();
@@ -71,7 +71,7 @@ module.exports = class extends Base {
         const domains = data[0].domain;
         for (let i in domains) {
           console.log("开始查询--" + domains[i]);
-          const result = await this.mongo("message", "mongo2").aggregate(
+          const result = await this.mongo("message", "mongo").aggregate(
             [
               {
                 $match: {
