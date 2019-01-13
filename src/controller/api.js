@@ -3,8 +3,8 @@ const Base = require("./base.js");
 module.exports = class extends Base {
   async indexAction() {
     let data = await this.mongo("message")
-      .limit(2)
-      .select();
+        .limit(2)
+        .select();
     console.log(data);
     return this.success(data);
   }
@@ -31,7 +31,7 @@ module.exports = class extends Base {
   }
 
   async domainAction() {
-    let model = this.mongo("domain", "mongo");
+    let model = this.mongo("domain", "mongo2");
     if (this.isGet) {
       let data = await model.select();
       if (data && data.length > 0) {
@@ -59,7 +59,7 @@ module.exports = class extends Base {
   }
 
   async statAction() {
-    let model = this.mongo("domain", "mongo");
+    let model = this.mongo("domain", "mongo2");
     let data = await model.select();
     if (data && data.length > 0) {
       let times = this.getTimes();
@@ -71,17 +71,17 @@ module.exports = class extends Base {
         const domains = data[0].domain;
         for (let i in domains) {
           console.log("开始查询--" + domains[i]);
-          const result = await this.mongo("message", "mongo").aggregate(
-            [
-              {
-                $match: {
-                  toDomain: domains[i],
-                  timestamp: { $gte: start, $lte: end }
-                }
-              },
-              { $group: { _id: "$status", count: { $sum: 1 } } }
-            ],
-            { allowDiskUse: true }
+          const result = await this.mongo("message", "mongo2").aggregate(
+              [
+                {
+                  $match: {
+                    toDomain: domains[i],
+                    timestamp: { $gte: start, $lte: end }
+                  }
+                },
+                { $group: { _id: "$status", count: { $sum: 1 } } }
+              ],
+              { allowDiskUse: true }
           );
           console.log(result);
           this.cache(`${domains[i]}${time.name}`, result);
@@ -116,10 +116,10 @@ module.exports = class extends Base {
     }
     console.log(where);
     let data = await this.mongo("message")
-      .order({ timestamp: -1 })
-      .where(where)
-      .page(page, 20)
-      .countSelect();
+        .order({ timestamp: -1 })
+        .where(where)
+        .page(page, 20)
+        .countSelect();
     return this.success(data);
   }
 
@@ -182,17 +182,17 @@ module.exports = class extends Base {
         }
 
         let result = await this.mongo("message").aggregate(
-          [
-            {
-              $match: match
-            },
-            {
-              $group: group
-            },
-            { $sort: { count: -1 } },
-            { $limit: 100 }
-          ],
-          { allowDiskUse: true }
+            [
+              {
+                $match: match
+              },
+              {
+                $group: group
+              },
+              { $sort: { count: -1 } },
+              { $limit: 100 }
+            ],
+            { allowDiskUse: true }
         );
 
         await this.cache(`${t}${time.name}`, result);
@@ -221,18 +221,18 @@ module.exports = class extends Base {
         }
 
         let result = await this.mongo("message").aggregate(
-          [
-            {
-              $match: {
-                timestamp: { $gte: start, $lte: end },
-                ipAddr: { $nin: ips }
-              }
-            },
-            { $group: { _id: "$" + t, count: { $sum: 1 } } },
-            { $sort: { count: -1 } },
-            { $limit: 10 }
-          ],
-          { allowDiskUse: true }
+            [
+              {
+                $match: {
+                  timestamp: { $gte: start, $lte: end },
+                  ipAddr: { $nin: ips }
+                }
+              },
+              { $group: { _id: "$" + t, count: { $sum: 1 } } },
+              { $sort: { count: -1 } },
+              { $limit: 10 }
+            ],
+            { allowDiskUse: true }
         );
         await this.cache(`${t}${time.name}`, result);
         console.log(result);
@@ -251,10 +251,10 @@ module.exports = class extends Base {
       where["timestamp"] = { $gte: parseInt(begin), $lte: parseInt(end) };
     }
     let data = await this.mongo(type, "mongo53")
-      .order({ timestamp: -1 })
-      .where(where)
-      .page(page, 20)
-      .countSelect();
+        .order({ timestamp: -1 })
+        .where(where)
+        .page(page, 20)
+        .countSelect();
     return this.success(data);
   }
 

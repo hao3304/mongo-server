@@ -34,14 +34,14 @@ exports.model = {
     logConnect: true, // 是否打印数据库连接信息
     logger: msg => think.logger.info(msg) // 打印信息的 logger
   },
-  // mongo: {
-  //   host: "127.0.0.1",
-  //   port: 27017,
-  //   user: "",
-  //   password: "",
-  //   database: "logMessage" // 数据库名称
-  // },
   mongo: {
+    host: "127.0.0.1",
+    port: 27017,
+    user: "",
+    password: "",
+    database: "logMessage" // 数据库名称
+  },
+  mongo2: {
     host: "202.121.179.53",
     port: 27017,
     user: "",
