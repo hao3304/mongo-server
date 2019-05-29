@@ -2,7 +2,7 @@ const Base = require("./base.js");
 
 module.exports = class extends Base {
   async indexAction() {
-    let data = await this.mongo("message")
+    let data = await this.mongo("message", "mongo2")
         .limit(2)
         .select();
     console.log(data);
@@ -115,7 +115,7 @@ module.exports = class extends Base {
       where["timestamp"] = { $gte: parseInt(begin), $lte: parseInt(end) };
     }
     console.log(where);
-    let data = await this.mongo("message")
+    let data = await this.mongo("message", "mongo2")
         .order({ timestamp: -1 })
         .where(where)
         .page(page, 20)
@@ -181,7 +181,7 @@ module.exports = class extends Base {
           group["_id"] = "$city";
         }
 
-        let result = await this.mongo("message").aggregate(
+        let result = await this.mongo("message","mongo2").aggregate(
             [
               {
                 $match: match
@@ -220,7 +220,7 @@ module.exports = class extends Base {
           ips = data[0].ips;
         }
 
-        let result = await this.mongo("message").aggregate(
+        let result = await this.mongo("message", "mongo2").aggregate(
             [
               {
                 $match: {

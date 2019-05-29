@@ -42,7 +42,7 @@ exports.model = {
     database: "logMessage" // 数据库名称
   },
   mongo2: {
-    host: "202.121.179.53",
+    host: "202.121.179.39",
     port: 27017,
     user: "",
     password: "",
